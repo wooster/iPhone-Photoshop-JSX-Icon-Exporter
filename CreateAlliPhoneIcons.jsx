@@ -62,11 +62,11 @@ function doResizeAndOutput()
 		
 		// iTunes artwork for AdHoc builds.
 		activeDocument.resizeImage(null, 512, 512, ResampleMethod.BICUBIC);
-		activeDocument.saveAs(File(path + "iTunesArtwork"))
+		activeDocument.saveAs(File(path + "iTunesArtwork"), pngOptions, true, Extension.NONE);
 		
 		// iPhone 4
 		activeDocument.resizeImage(null,114,114,ResampleMethod.BICUBIC);  
-	   	activeDocument.saveAs(File(path + "/icon@2x.png"), pngOptions, true);                     
+	   	activeDocument.saveAs(File(path + "/icon-114x114.png"), pngOptions, true);                     
         
         // iPad
 	 	activeDocument.resizeImage(null,72,72,ResampleMethod.BICUBIC);  
