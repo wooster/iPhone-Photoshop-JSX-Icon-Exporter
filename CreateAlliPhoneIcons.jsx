@@ -49,34 +49,49 @@ function doResizeAndOutput()
 		var pngOptions = new PNGSaveOptions();
 		pngOptions.interlaced = false;
 		
-		// Resize icons from largest to smallest - to preserve quality on resizing.
-		/*
-			Icon@2x.png - 114x114 pixels application icon for high resolution iPhone 4
-			Icon-72.png - 72x72 pixels application icon for iPad
-			Icon-Small@2x.png - 58x58 pixels settings icon for high resolution iPhone
-			Icon.png - 57x57 pixels application icon for standard resolution iPhone
-			Icon-Small-50.png - 50x50 pixels settings icon for iPad
-			Icon-Small.png - 29x29 pixels settings icon for standard resolution iPhone
-		 
-		*/
-		// 114
+		// Resize icons from largest to smallest - to preserve quality 
+		// on resizing.
+		
+		// Icon sizes from:
+		// http://mrgan.tumblr.com/post/708404794/ios-app-icon-sizes
+		
+		// Here they actually list the files and what order you need
+		// to put them in:
+		// http://developer.apple.com/iphone/library/qa/qa2010/qa1686.html
+		// I don't like their filenames though.
+		
+		// iTunes artwork for AdHoc builds.
+		activeDocument.resizeImage(null, 512, 512, ResampleMethod.BICUBIC);
+		activeDocument.saveAs(File(path + "iTunesArtwork"))
+		
+		// iPhone 4
 		activeDocument.resizeImage(null,114,114,ResampleMethod.BICUBIC);  
-	   	activeDocument.saveAs(File(path + "/Icon@2x.png"), pngOptions, true);                     
+	   	activeDocument.saveAs(File(path + "/icon@2x.png"), pngOptions, true);                     
         
+        // iPad
 	 	activeDocument.resizeImage(null,72,72,ResampleMethod.BICUBIC);  
-		activeDocument.saveAs(File(path + "/Icon-72.png"), pngOptions, true);
+		activeDocument.saveAs(File(path + "/icon-72x72.png"), pngOptions, true);
 
+        // iPhone 4 Settings/Spotlight
 	 	activeDocument.resizeImage(null,58,58,ResampleMethod.BICUBIC);  
-		activeDocument.saveAs(File(path + "/Icon-Small@2x.png"), pngOptions, true);
+		activeDocument.saveAs(File(path + "/icon-58x58.png"), pngOptions, true);
 
+        // iPhone 2G/3G/3GS
 	 	activeDocument.resizeImage(null,57,57,ResampleMethod.BICUBIC);  
-		activeDocument.saveAs(File(path + "/Icon.png"), pngOptions, true);
+		activeDocument.saveAs(File(path + "/icon.png"), pngOptions, true);
 
-	 	activeDocument.resizeImage(null,50,50,ResampleMethod.BICUBIC);  
-		activeDocument.saveAs(File(path + "/Icon-Small-50.png"), pngOptions, true);
-
+        // iPad Spotlight
+        // 1px around all four edges is trimmed off in software by
+        // Apple (weird, right?), so we need to center a 48x48 pixel
+        // version of the icon.
+	 	activeDocument.resizeImage(null,48,48,ResampleMethod.BICUBIC);
+	 	activeDocument.resizeCanvas(50, 50, AnchorPosition.MIDDLECENTER);
+		activeDocument.saveAs(File(path + "/icon-50x50.png"), pngOptions, true);
+		activeDocument.resizeCanvas(48, 48, AnchorPosition.MIDDLECENTER);
+        
+        // iPhone 2G/3G/3GS Settings/Spotlight, iPad Settings
 	 	activeDocument.resizeImage(null,29,29,ResampleMethod.BICUBIC);  
-		activeDocument.saveAs(File(path + "/Icon-Small.png"), pngOptions, true);
+		activeDocument.saveAs(File(path + "/icon-29x29.png"), pngOptions, true);
 		
 		 // Close file
 		activeDocument.close(SaveOptions.DONOTSAVECHANGES);
