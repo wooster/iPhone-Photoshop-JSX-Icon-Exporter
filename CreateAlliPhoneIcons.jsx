@@ -60,6 +60,16 @@ function doResizeAndOutput()
 		// http://developer.apple.com/iphone/library/qa/qa2010/qa1686.html
 		// I don't like their filenames though.
 		
+		// Flatten document so layer fx don't scale.
+		activeDocument.selection.selectAll();
+		activeDocument.selection.copy(true);
+		activeDocument.close(SaveOptions.DONOTSAVECHANGES);
+		
+		var mergedDoc = app.documents.add(512, 512, 72, "Merged Icon", NewDocumentMode.RGB, DocumentFill.TRANSPARENT, 1);
+		
+		activeDocument.selection.selectAll();
+		activeDocument.paste();
+		
 		// iTunes artwork for AdHoc builds.
 		activeDocument.resizeImage(null, 512, 512, ResampleMethod.BICUBIC);
 		activeDocument.saveAs(File(path + "iTunesArtwork"), pngOptions, true, Extension.NONE);
