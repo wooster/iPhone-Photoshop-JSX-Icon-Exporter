@@ -34,16 +34,26 @@ function doResizeAndOutput()
 {                              
 	
 	   	// Select Icon file
-		var file = File.openDialog("Select your iPhone icon file, this should be 512 by 512 for best results, your new icon files will be saved here as well.", /\.(jpe|jpg|jpeg|gif|png|tif|tiff|bmp|psd)/i);
+		var file = File.openDialog("Select your iPhone icon file, this should be 1024 by 1024 for best results, your new icon files will be saved here as well.", /\.(jpe|jpg|jpeg|gif|png|tif|tiff|bmp|psd)/i);
 	    if(file == null) return; // cancelled. 
         app.open(file);  
 		var path =  file.absoluteURI.substr(0,file.absoluteURI.lastIndexOf("/")+1);
-	     
+	    path = path + "/" + "generated"
+		var folder = new Folder(path);
+		if (!folder.exists) {
+			folder.create();
+		}
+		var resampleMethod = ResampleMethod.BICUBIC;
 		
 	    // Check document resolution
 		if(activeDocument.resolution!=72){
 			activeDocument.resizeImage(null,activeDocument.height,72,ResampleMethod.BICUBIC);
-		}    
+		}
+		
+		var baseWidth = 1024;
+		if (activeDocument.width != 1024) {
+			baseWidth = 512;
+		}
 		
 		// Png Save Options                                          
 		var pngOptions = new PNGSaveOptions();
@@ -65,42 +75,42 @@ function doResizeAndOutput()
 		activeDocument.selection.copy(true);
 		activeDocument.close(SaveOptions.DONOTSAVECHANGES);
 		
-		var mergedDoc = app.documents.add(512, 512, 72, "Merged Icon", NewDocumentMode.RGB, DocumentFill.TRANSPARENT, 1);
+		var mergedDoc = app.documents.add(baseWidth, baseWidth, 72, "Merged Icon", NewDocumentMode.RGB, DocumentFill.TRANSPARENT, 1);
 		
 		activeDocument.selection.selectAll();
 		activeDocument.paste();
 		
 		// iTunes artwork for AdHoc builds.
-		activeDocument.resizeImage(null, 512, 512, ResampleMethod.BICUBIC);
-		activeDocument.saveAs(File(path + "iTunesArtwork"), pngOptions, true, Extension.NONE);
+		activeDocument.resizeImage(null, baseWidth, baseWidth, resampleMethod);
+		activeDocument.saveAs(File(path + "/iTunesArtwork"), pngOptions, true, Extension.NONE);
 		
 		// iPhone 4
-		activeDocument.resizeImage(null,114,114,ResampleMethod.BICUBIC);  
+		activeDocument.resizeImage(null,114,114,resampleMethod);  
 	   	activeDocument.saveAs(File(path + "/icon-114x114.png"), pngOptions, true);                     
         
         // iPad
-	 	activeDocument.resizeImage(null,72,72,ResampleMethod.BICUBIC);  
+	 	activeDocument.resizeImage(null,72,72,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon-72x72.png"), pngOptions, true);
 
         // iPhone 4 Settings/Spotlight
-	 	activeDocument.resizeImage(null,58,58,ResampleMethod.BICUBIC);  
+	 	activeDocument.resizeImage(null,58,58,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon-58x58.png"), pngOptions, true);
 
         // iPhone 2G/3G/3GS
-	 	activeDocument.resizeImage(null,57,57,ResampleMethod.BICUBIC);  
+	 	activeDocument.resizeImage(null,57,57,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon.png"), pngOptions, true);
 
         // iPad Spotlight
         // 1px around all four edges is trimmed off in software by
         // Apple (weird, right?), so we need to center a 48x48 pixel
         // version of the icon.
-	 	activeDocument.resizeImage(null,48,48,ResampleMethod.BICUBIC);
+	 	activeDocument.resizeImage(null,48,48,resampleMethod);
 	 	activeDocument.resizeCanvas(50, 50, AnchorPosition.MIDDLECENTER);
 		activeDocument.saveAs(File(path + "/icon-50x50.png"), pngOptions, true);
 		activeDocument.resizeCanvas(48, 48, AnchorPosition.MIDDLECENTER);
         
         // iPhone 2G/3G/3GS Settings/Spotlight, iPad Settings
-	 	activeDocument.resizeImage(null,29,29,ResampleMethod.BICUBIC);  
+	 	activeDocument.resizeImage(null,29,29,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon-29x29.png"), pngOptions, true);
 		
 		 // Close file
