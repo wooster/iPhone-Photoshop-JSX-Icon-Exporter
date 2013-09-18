@@ -81,13 +81,21 @@ function doResizeAndOutput()
 		activeDocument.paste();
 		
 		// iTunes artwork for AdHoc builds.
-		activeDocument.resizeImage(null, baseWidth, baseWidth, resampleMethod);
+		activeDocument.resizeImage(null, 512, 512, resampleMethod);
 		activeDocument.saveAs(File(path + "/iTunesArtwork"), pngOptions, true, Extension.NONE);
+		
+		// iPad iOS 7 Retina
+		activeDocument.resizeImage(null,152,152,resampleMethod);  
+	   	activeDocument.saveAs(File(path + "/icon-152x152.png"), pngOptions, true);
 		
 		// iPhone 4
 		activeDocument.resizeImage(null,114,114,resampleMethod);  
 	   	activeDocument.saveAs(File(path + "/icon-114x114.png"), pngOptions, true);                     
         
+        // iPad iOS 7
+	 	activeDocument.resizeImage(null,76,76,resampleMethod);  
+		activeDocument.saveAs(File(path + "/icon-76x76.png"), pngOptions, true);
+		
         // iPad
 	 	activeDocument.resizeImage(null,72,72,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon-72x72.png"), pngOptions, true);
