@@ -87,8 +87,16 @@ function doResizeAndOutput()
 		// iPad iOS 7 Retina
 		activeDocument.resizeImage(null,152,152,resampleMethod);  
 	   	activeDocument.saveAs(File(path + "/icon-152x152.png"), pngOptions, true);
+	
+		// iPad iOS 5 & 6 Retina
+		activeDocument.resizeImage(null,144,144,resampleMethod);  
+	   	activeDocument.saveAs(File(path + "/icon-144x144.png"), pngOptions, true);
 		
-		// iPhone 4
+		// iPhone 5
+		activeDocument.resizeImage(null,120,120,resampleMethod);  
+	   	activeDocument.saveAs(File(path + "/icon-120x120.png"), pngOptions, true);
+		
+		// iPhone 4 iOS 5 & 6 Retina
 		activeDocument.resizeImage(null,114,114,resampleMethod);  
 	   	activeDocument.saveAs(File(path + "/icon-114x114.png"), pngOptions, true);                     
         
@@ -103,6 +111,10 @@ function doResizeAndOutput()
         // iPhone 4 Settings/Spotlight
 	 	activeDocument.resizeImage(null,58,58,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon-58x58.png"), pngOptions, true);
+		
+        // iPhone iOS 5 & 6
+	 	activeDocument.resizeImage(null,57,57,resampleMethod);  
+		activeDocument.saveAs(File(path + "/icon-57x57.png"), pngOptions, true);
 
         // iPhone 2G/3G/3GS
 	 	activeDocument.resizeImage(null,57,57,resampleMethod);  
