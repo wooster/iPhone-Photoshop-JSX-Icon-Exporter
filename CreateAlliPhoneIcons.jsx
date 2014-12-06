@@ -81,27 +81,42 @@ function doResizeAndOutput()
 		activeDocument.paste();
 		
 		// iTunes artwork for AdHoc builds.
-		activeDocument.resizeImage(null, 512, 512, resampleMethod);
+		activeDocument.resizeImage(null, 1024, 1024, resampleMethod);
 		activeDocument.saveAs(File(path + "/iTunesArtwork"), pngOptions, true, Extension.NONE);
 		
-		// iPad iOS 7 Retina
-		activeDocument.resizeImage(null,152,152,resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-152x152.png"), pngOptions, true);
+		// iPhone 6 Plus @3x
+		activeDocument.resizeImage(null, 180, 180, resampleMethod);  
+	   	activeDocument.saveAs(File(path + "/icon-60x60@3x.png"), pngOptions, true);
+		
+		// iPad and iPad Mini iOS 7 Retina
+		activeDocument.resizeImage(null, 152,152,resampleMethod);  
+	   	activeDocument.saveAs(File(path + "/icon-76x76@2x.png"), pngOptions, true);
 	
 		// iPad iOS 5 & 6 Retina
 		activeDocument.resizeImage(null,144,144,resampleMethod);  
 	   	activeDocument.saveAs(File(path + "/icon-144x144.png"), pngOptions, true);
 		
-		// iPhone 5
-		activeDocument.resizeImage(null,120,120,resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-120x120.png"), pngOptions, true);
+		// iPhone 4s, iPhone 5, and iPhone 6 at 2x
+		activeDocument.resizeImage(null, 120, 120,resampleMethod);  
+	   	activeDocument.saveAs(File(path + "/icon-60x60@2x.png"), pngOptions, true);
+		
+		// iPhone 6 Plus Spotlight
+	   	activeDocument.saveAs(File(path + "/icon-40x40@3x.png"), pngOptions, true);
 		
 		// iPhone 4 iOS 5 & 6 Retina
 		activeDocument.resizeImage(null,114,114,resampleMethod);  
 	   	activeDocument.saveAs(File(path + "/icon-114x114.png"), pngOptions, true);                     
-        
-        // iPad iOS 7
-	 	activeDocument.resizeImage(null,76,76,resampleMethod);  
+
+        // iPhone 6 Plus Settings/Spotlight
+	 	activeDocument.resizeImage(null, 87, 87, resampleMethod);  
+		activeDocument.saveAs(File(path + "/icon-29x29@3x.png"), pngOptions, true);
+
+        // iPad, iPad Mini, iPhone 4s, iPhone 6, iPhone 5 Spotlight
+	 	activeDocument.resizeImage(null, 80, 80, resampleMethod);  
+		activeDocument.saveAs(File(path + "/icon-40x40@2x.png"), pngOptions, true);
+		
+        // iPad 2 and iPad mini iOS 7
+	 	activeDocument.resizeImage(null, 76, 76,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon-76x76.png"), pngOptions, true);
 		
         // iPad
@@ -109,8 +124,8 @@ function doResizeAndOutput()
 		activeDocument.saveAs(File(path + "/icon-72x72.png"), pngOptions, true);
 
         // iPhone 4 Settings/Spotlight
-	 	activeDocument.resizeImage(null,58,58,resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-58x58.png"), pngOptions, true);
+	 	activeDocument.resizeImage(null, 58, 58,resampleMethod);  
+		activeDocument.saveAs(File(path + "/icon-29x29@2x.png"), pngOptions, true);
 		
         // iPhone iOS 5 & 6
 	 	activeDocument.resizeImage(null,57,57,resampleMethod);  
@@ -129,6 +144,10 @@ function doResizeAndOutput()
 		activeDocument.saveAs(File(path + "/icon-50x50.png"), pngOptions, true);
 		activeDocument.resizeCanvas(48, 48, AnchorPosition.MIDDLECENTER);
         
+        // iPad 2 and iPad Mini Spotlight
+	 	activeDocument.resizeImage(null, 40, 40, resampleMethod);  
+		activeDocument.saveAs(File(path + "/icon-40x40.png"), pngOptions, true);
+		
         // iPhone 2G/3G/3GS Settings/Spotlight, iPad Settings
 	 	activeDocument.resizeImage(null,29,29,resampleMethod);  
 		activeDocument.saveAs(File(path + "/icon-29x29.png"), pngOptions, true);
