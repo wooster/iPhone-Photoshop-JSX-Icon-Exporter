@@ -87,6 +87,10 @@ function doResizeAndOutput()
 		// iPhone 6 Plus @3x
 		activeDocument.resizeImage(null, 180, 180, resampleMethod);  
 	   	activeDocument.saveAs(File(path + "/icon-60x60@3x.png"), pngOptions, true);
+        
+		// iPad Pro @2x
+		activeDocument.resizeImage(null, 167, 167, resampleMethod);  
+	   	activeDocument.saveAs(File(path + "/icon-83.5x83.5@2x.png"), pngOptions, true);
 		
 		// iPad and iPad Mini iOS 7 Retina
 		activeDocument.resizeImage(null, 152,152,resampleMethod);  
