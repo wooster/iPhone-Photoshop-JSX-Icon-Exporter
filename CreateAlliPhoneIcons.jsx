@@ -30,136 +30,138 @@ app.preferences.typeUnits = TypeUnits.PIXELS;
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 //create a new slideshow package
-function doResizeAndOutput()
-{                              
-	
-	   	// Select Icon file
-		var file = File.openDialog("Select your iPhone icon file, this should be 1024 by 1024 for best results, your new icon files will be saved here as well.", /\.(jpe|jpg|jpeg|gif|png|tif|tiff|bmp|psd)/i);
-	    if(file == null) return; // cancelled. 
-        app.open(file);  
-		var path =  file.absoluteURI.substr(0,file.absoluteURI.lastIndexOf("/")+1);
-	    path = path + "/" + "generated"
-		var folder = new Folder(path);
-		if (!folder.exists) {
-			folder.create();
-		}
-		var resampleMethod = ResampleMethod.BICUBIC;
-		
-	    // Check document resolution
-		if(activeDocument.resolution!=72){
-			activeDocument.resizeImage(null,activeDocument.height,72,ResampleMethod.BICUBIC);
-		}
-		
-		var baseWidth = 1024;
-		if (activeDocument.width != 1024) {
-			baseWidth = 512;
-		}
-		
-		// Png Save Options                                          
-		var pngOptions = new PNGSaveOptions();
-		pngOptions.interlaced = false;
-		
-		// Resize icons from largest to smallest - to preserve quality 
-		// on resizing.
-		
-		// Icon sizes from:
-		// http://mrgan.tumblr.com/post/708404794/ios-app-icon-sizes
-		
-		// Here they actually list the files and what order you need
-		// to put them in:
-		// http://developer.apple.com/iphone/library/qa/qa2010/qa1686.html
-		// I don't like their filenames though.
-		
-		// Flatten document so layer fx don't scale.
-		activeDocument.selection.selectAll();
-		activeDocument.selection.copy(true);
-		activeDocument.close(SaveOptions.DONOTSAVECHANGES);
-		
-		var mergedDoc = app.documents.add(baseWidth, baseWidth, 72, "Merged Icon", NewDocumentMode.RGB, DocumentFill.TRANSPARENT, 1);
-		
-		activeDocument.selection.selectAll();
-		activeDocument.paste();
-		
-		// iTunes artwork for AdHoc builds.
-		activeDocument.resizeImage(null, 1024, 1024, resampleMethod);
-		activeDocument.saveAs(File(path + "/iTunesArtwork"), pngOptions, true, Extension.NONE);
-		
-		// iPhone 6 Plus @3x
-		activeDocument.resizeImage(null, 180, 180, resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-60x60@3x.png"), pngOptions, true);
+function doResizeAndOutput() {
+    // Select Icon file
+    var file = File.openDialog("Select your iPhone icon file, this should be 1024 by 1024 for best results, your new icon files will be saved here as well.", /\.(jpe|jpg|jpeg|gif|png|tif|tiff|bmp|psd)/i);
+    if (file == null) {
+        return; // cancelled.
+    }
+    app.open(file);  
+    var path =  file.absoluteURI.substr(0, file.absoluteURI.lastIndexOf("/") + 1);
+    path = path + "/" + "generated"
+    var folder = new Folder(path);
+    if (!folder.exists) {
+        folder.create();
+    }
+    var resampleMethod = ResampleMethod.BICUBIC;
+
+    // Check document resolution
+    if (activeDocument.resolution != 72) {
+        activeDocument.resizeImage(null, activeDocument.height, 72, ResampleMethod.BICUBIC);
+    }
+
+    var baseWidth = 1024;
+    if (activeDocument.width != 1024) {
+        baseWidth = 512;
+    }
+
+    // Png Save Options
+    var pngOptions = new ExportOptionsSaveForWeb;   
+    pngOptions.format = SaveDocumentType.PNG  
+    pngOptions.PNG8 = true;   
+    pngOptions.transparency = false;   
+    pngOptions.interlaced = false;   
+    pngOptions.quality = 100;  
+
+    // Resize icons from largest to smallest - to preserve quality 
+    // on resizing.
+
+    // Icon sizes from:
+    // http://mrgan.tumblr.com/post/708404794/ios-app-icon-sizes
+
+    // Here they actually list the files and what order you need
+    // to put them in:
+    // http://developer.apple.com/iphone/library/qa/qa2010/qa1686.html
+    // I don't like their filenames though.
+
+    // Flatten document so layer fx don't scale.
+    activeDocument.selection.selectAll();
+    activeDocument.selection.copy(true);
+    activeDocument.close(SaveOptions.DONOTSAVECHANGES);
+
+    var mergedDoc = app.documents.add(baseWidth, baseWidth, 72, "Merged Icon", NewDocumentMode.RGB, DocumentFill.TRANSPARENT, 1);
+
+    activeDocument.selection.selectAll();
+    activeDocument.paste();
+
+    var icons = [
+        // iTunes artwork for AdHoc builds.
+        {"name": "icon-1024x1024", "size": 1024},
         
-		// iPad Pro @2x
-		activeDocument.resizeImage(null, 167, 167, resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-83.5x83.5@2x.png"), pngOptions, true);
-		
-		// iPad and iPad Mini iOS 7 Retina
-		activeDocument.resizeImage(null, 152,152,resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-76x76@2x.png"), pngOptions, true);
-	
-		// iPad iOS 5 & 6 Retina
-		activeDocument.resizeImage(null,144,144,resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-144x144.png"), pngOptions, true);
-		
-		// iPhone 4s, iPhone 5, and iPhone 6 at 2x
-		activeDocument.resizeImage(null, 120, 120,resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-60x60@2x.png"), pngOptions, true);
-		
-		// iPhone 6 Plus Spotlight
-	   	activeDocument.saveAs(File(path + "/icon-40x40@3x.png"), pngOptions, true);
-		
-		// iPhone 4 iOS 5 & 6 Retina
-		activeDocument.resizeImage(null,114,114,resampleMethod);  
-	   	activeDocument.saveAs(File(path + "/icon-114x114.png"), pngOptions, true);                     
-
+        // iPhone 6 Plus @3x
+        {"name": "icon-60x60@3x", "size": 180},
+        
+        // iPad Pro @2x
+        {"name": "icon-83.5x83.5@2x", "size": 167},
+        
+        // iPad and iPad Mini iOS 7 Retina
+        {"name": "icon-76x76@2x", "size": 152},
+        
+        // iPad iOS 5 & 6 Retina
+        {"name": "icon-144x144", "size": 144},
+        
+        // iPhone 4s, iPhone 5, and iPhone 6 at 2x
+        {"name": "icon-60x60@2x", "size": 120},
+        
+        // iPhone 6 Plus Spotlight
+        {"name": "icon-40x40@3x", "size": 120},
+        
+        // iPhone 4 iOS 5 & 6 Retina
+        {"name": "icon-114x114", "size": 114},
+        
         // iPhone 6 Plus Settings/Spotlight
-	 	activeDocument.resizeImage(null, 87, 87, resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-29x29@3x.png"), pngOptions, true);
-
+        {"name": "icon-29x29@3x", "size": 87},
+        
         // iPad, iPad Mini, iPhone 4s, iPhone 6, iPhone 5 Spotlight
-	 	activeDocument.resizeImage(null, 80, 80, resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-40x40@2x.png"), pngOptions, true);
-		
+        {"name": "icon-40x40@2x", "size": 80},
+        
         // iPad 2 and iPad mini iOS 7
-	 	activeDocument.resizeImage(null, 76, 76,resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-76x76.png"), pngOptions, true);
-		
+        {"name": "icon-76x76", "size": 76},
+        
         // iPad
-	 	activeDocument.resizeImage(null,72,72,resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-72x72.png"), pngOptions, true);
-
+        {"name": "icon-72x72", "size": 72},
+        
         // iPhone 4 Settings/Spotlight
-	 	activeDocument.resizeImage(null, 58, 58,resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-29x29@2x.png"), pngOptions, true);
-		
+        {"name": "icon-29x29@2x", "size": 58},
+        
         // iPhone iOS 5 & 6
-	 	activeDocument.resizeImage(null,57,57,resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-57x57.png"), pngOptions, true);
-
+        {"name": "icon-57x57", "size": 57},
+        
         // iPhone 2G/3G/3GS
-	 	activeDocument.resizeImage(null,57,57,resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon.png"), pngOptions, true);
-
+        {"name": "icon", "size": 57},
+        
         // iPad Spotlight
-        // 1px around all four edges is trimmed off in software by
-        // Apple (weird, right?), so we need to center a 48x48 pixel
-        // version of the icon.
-	 	activeDocument.resizeImage(null,48,48,resampleMethod);
-	 	activeDocument.resizeCanvas(50, 50, AnchorPosition.MIDDLECENTER);
-		activeDocument.saveAs(File(path + "/icon-50x50.png"), pngOptions, true);
-		activeDocument.resizeCanvas(48, 48, AnchorPosition.MIDDLECENTER);
+        {"name": "icon-50x50", "size": 50},
         
         // iPad 2 and iPad Mini Spotlight
-	 	activeDocument.resizeImage(null, 40, 40, resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-40x40.png"), pngOptions, true);
-		
+        {"name": "icon-40x40", "size": 40},
+        
         // iPhone 2G/3G/3GS Settings/Spotlight, iPad Settings
-	 	activeDocument.resizeImage(null,29,29,resampleMethod);  
-		activeDocument.saveAs(File(path + "/icon-29x29.png"), pngOptions, true);
-		
-		 // Close file
-		activeDocument.close(SaveOptions.DONOTSAVECHANGES);
-		
-        alert("Done\nAll the new icons have been saved beside your original icons.")
+        {"name": "icon-29x29", "size": 29}
+    ];
+    
+    for (var i = 0; i < icons.length; i++) {
+        var eachIcon = icons[i];
+        if (eachIcon.size == 50) {
+            // 1px around all four edges is trimmed off in software by
+            // Apple (weird, right?), so we need to center a 48x48 pixel
+            // version of the icon.
+            activeDocument.resizeImage(null, 48, 48, resampleMethod);
+            activeDocument.resizeCanvas(50, 50, AnchorPosition.MIDDLECENTER);
+        } else {
+            activeDocument.resizeImage(null, eachIcon.size, eachIcon.size, resampleMethod);
+        }
+        var file = File(path + "/" + eachIcon.name + ".png");
+        activeDocument.exportDocument(file, ExportType.SAVEFORWEB, pngOptions);
+        if (eachIcon.size == 50) {
+            activeDocument.resizeCanvas(48, 48, AnchorPosition.MIDDLECENTER);
+        }
+    }
+
+    // Close file
+    activeDocument.close(SaveOptions.DONOTSAVECHANGES);
+
+    alert("Done\nAll the new icons have been saved beside your original icons.")
 
 }
 //create the slideshow source files
